@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Nancy.Gzip</id>
+    <version>0.1.0</version>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <authors>Derek Comartin</authors>
+    <owners>Derek Comartin</owners>
+    <licenseUrl>https://github.com/dcomartin/Nancy.Gzip/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/dcomartin/Nancy.Gzip</projectUrl>
+    <iconUrl>https://github.com/dcomartin/Nancy.Gzip/blob/master/assets/gzip-file-format.png</iconUrl>
+    <description>Adds Gzip Compression as HTTP Content-Encoding to NancyFX.</description>
+    <copyright>Copyright 2016 Derek Comartin</copyright>
+    <tags>gzip nancy nancyfx compression</tags>
+    <dependencies>
+        <dependency id="Nancy" version="[1.0,2.0)"/>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\Nancy.Gzip.dll" target="lib\net45" />
+  </files>
+</package>
