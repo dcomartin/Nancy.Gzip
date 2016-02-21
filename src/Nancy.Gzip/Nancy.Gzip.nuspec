@@ -2,6 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Nancy.Gzip</id>
+    <title>Nancy.Gzip</title>
     <version>0.1.0</version>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <authors>Derek Comartin</authors>
