@@ -9,7 +9,10 @@
         private readonly Browser _app = new Browser(with =>
         {
             with.Module<TestModule>();
-            with.ApplicationStartupTasks(typeof (GzipCompression));
+            with.ApplicationStartup((container, pipelines) =>
+            {
+                pipelines.EnableGzipCompression();
+            });
         });
 
         private class TestModule : NancyModule
