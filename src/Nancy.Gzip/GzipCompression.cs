@@ -4,9 +4,9 @@
     using System.Linq;
     using Bootstrapper;
 
-    public class GzipCompression : IApplicationStartup
+    public static class GzipCompression
     {
-        public void Initialize(IPipelines pipelines)
+        public static void EnableGzipCompression(this IPipelines pipelines)
         {
             pipelines.AfterRequest += CheckForCompression;
         }
