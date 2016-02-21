@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.Gzip", "Nancy.Gzip\Na
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.Gzip.Tests", "Nancy.Gzip.Tests\Nancy.Gzip.Tests.csproj", "{64658E60-EE4A-418E-9B95-F915D719A07B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.Gzip.Example", "Nancy.Gzip.Example\Nancy.Gzip.Example.csproj", "{24217ED0-E0DD-4FF2-8B61-78AE17CDFAB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{64658E60-EE4A-418E-9B95-F915D719A07B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64658E60-EE4A-418E-9B95-F915D719A07B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64658E60-EE4A-418E-9B95-F915D719A07B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24217ED0-E0DD-4FF2-8B61-78AE17CDFAB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24217ED0-E0DD-4FF2-8B61-78AE17CDFAB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24217ED0-E0DD-4FF2-8B61-78AE17CDFAB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24217ED0-E0DD-4FF2-8B61-78AE17CDFAB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

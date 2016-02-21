@@ -6,9 +6,17 @@
 
     public static class GzipCompression
     {
+        private static GzipCompressionSettings _settings;
+
+        public static void EnableGzipCompression(this IPipelines pipelines, GzipCompressionSettings settings)
+        {
+            _settings = settings;
+            pipelines.AfterRequest += CheckForCompression;
+        }
+
         public static void EnableGzipCompression(this IPipelines pipelines)
         {
-            pipelines.AfterRequest += CheckForCompression;
+            EnableGzipCompression(pipelines, new GzipCompressionSettings());
         }
 
         private static void CheckForCompression(NancyContext context)
@@ -56,7 +64,7 @@
             if (response.Headers.TryGetValue("Content-Length", out contentLength))
             {
                 var length = long.Parse(contentLength);
-                if (length < GzipCompressionSettings.MinimumBytes)
+                if (length < _settings.MinimumBytes)
                 {
                     return true;
                 }
@@ -66,7 +74,7 @@
 
         private static bool ResponseIsCompatibleMimeType(Response response)
         {
-            return GzipCompressionSettings.MimeTypes.Any(x => x == response.ContentType || response.ContentType.StartsWith($"{x};"));
+            return _settings.MimeTypes.Any(x => x == response.ContentType || response.ContentType.StartsWith($"{x};"));
         }
 
         private static bool RequestIsGzipCompatible(Request request)

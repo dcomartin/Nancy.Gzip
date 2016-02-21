@@ -2,11 +2,11 @@
 {
     using System.Collections.Generic;
 
-    public static class GzipCompressionSettings
+    public class GzipCompressionSettings
     {
-        public static int MinimumBytes { get; set; } = 4096;
+        public int MinimumBytes { get; set; } = 4096;
 
-        public static IList<string> MimeTypes { get; set; } = new List<string>
+        public IList<string> MimeTypes { get; set; } = new List<string>
         {
             "text/plain",
             "text/html",
