@@ -1,6 +1,8 @@
 # Nancy.Gzip [![Build status](https://ci.appveyor.com/api/projects/status/v9g6v9u314gdv0rs?svg=true)](https://ci.appveyor.com/project/dcomartin/nancy-gzip) [![License](https://img.shields.io/github/license/horsdal/nancy.linker.svg)](./LICENSE)
 Adds gzip compression to your Nancy web application.
 
+## Installation
+
 ```PowerShell
 PM> Install-Package Nancy.Gzip
 ```
