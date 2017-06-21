@@ -15,6 +15,7 @@
             "application/json",
             "application/x-javascript",
             "application/atom+xml",
+            "application/xml"
         };
     }
 }
