@@ -14,7 +14,7 @@
     <copyright>Copyright 2017 Derek Comartin</copyright>
     <tags>gzip nancy nancyfx compression</tags>
     <dependencies>
-        <dependency id="Nancy" version="[2.0)"/>
+        <dependency id="Nancy" version="2.0.0-clinteastwood"/>
     </dependencies>
   </metadata>
   <files>
