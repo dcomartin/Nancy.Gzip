@@ -18,6 +18,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\Nancy.Gzip.dll" target="lib\net45" />
+    <file src="bin\Release\netstandard1.6\Nancy.Gzip.dll" target="lib\netstandard1.6" />
   </files>
 </package>
