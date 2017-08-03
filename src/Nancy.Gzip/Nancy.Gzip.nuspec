@@ -3,7 +3,7 @@
   <metadata>
     <id>Nancy.Gzip</id>
     <title>Nancy.Gzip</title>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <authors>Derek Comartin</authors>
     <owners>Derek Comartin</owners>
@@ -11,10 +11,10 @@
     <projectUrl>https://github.com/dcomartin/Nancy.Gzip</projectUrl>
     <iconUrl>https://github.com/dcomartin/Nancy.Gzip/blob/master/assets/gzip-file-format.png</iconUrl>
     <description>Adds Gzip Compression as HTTP Content-Encoding to NancyFX.</description>
-    <copyright>Copyright 2016 Derek Comartin</copyright>
+    <copyright>Copyright 2017 Derek Comartin</copyright>
     <tags>gzip nancy nancyfx compression</tags>
     <dependencies>
-        <dependency id="Nancy" version="[1.0,2.0)"/>
+        <dependency id="Nancy" version="[2.0)"/>
     </dependencies>
   </metadata>
   <files>

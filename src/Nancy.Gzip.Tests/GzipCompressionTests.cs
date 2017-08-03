@@ -1,4 +1,6 @@
-﻿namespace Nancy.Gzip.Tests
+﻿using System.Threading.Tasks;
+
+namespace Nancy.Gzip.Tests
 {
     using FluentAssertions;
     using Testing;
@@ -19,7 +21,7 @@
         {
             public TestModule()
             {
-                Get["/ok"] = _ =>
+                Get("/ok", _ =>
                 {
                     var response = new Response
                     {
@@ -28,31 +30,31 @@
                     };
 
                     return response;
-                };
+                });
 
-                Get["/small"] = _ =>
+                Get("/small", _ =>
                 {
                     var response = new Response();
                     response.Headers.Add("Content-Length", "0");
                     return response;
-                };
+                });
 
 
-                Get["/novalidcontenttype"] = _ =>
+                Get("/novalidcontenttype", _ =>
                 {
                     var response = new Response();
                     response.Headers.Add("Content-Type", "application/x-not-valid");
                     return response;
-                };
+                });
 
-                Get["/nocontent"] = _ => HttpStatusCode.NoContent;
+                Get("/nocontent", _ => HttpStatusCode.NoContent);
             }
         }
 
         [Fact]
-        public void should_return_content_encoding_when_accept()
+        public async Task should_return_content_encoding_when_accept()
         {
-            var response = _app.Get("/ok", context =>
+            var response = await _app.Get("/ok", context =>
             {
                 context.Header("Accept-Encoding", "gzip");
                 context.HttpRequest();
@@ -62,9 +64,9 @@
         }
 
         [Fact]
-        public void should_return_no_content_encoding_when_too_small()
+        public async Task should_return_no_content_encoding_when_too_small()
         {
-            var response = _app.Get("/small", context =>
+            var response = await _app.Get("/small", context =>
             {
                 context.Header("Accept-Encoding", "gzip");
                 context.HttpRequest();
@@ -74,9 +76,9 @@
         }
 
         [Fact]
-        public void should_return_no_content_encoding_when_not_valid_content_type()
+        public async Task should_return_no_content_encoding_when_not_valid_content_type()
         {
-            var response = _app.Get("/novalidcontenttype", context =>
+            var response = await _app.Get("/novalidcontenttype", context =>
             {
                 context.Header("Accept-Encoding", "gzip");
                 context.HttpRequest();
@@ -86,9 +88,9 @@
         }
 
         [Fact]
-        public void should_return_no_content_encoding_when_not_valid_accept()
+        public async Task should_return_no_content_encoding_when_not_valid_accept()
         {
-            var response = _app.Get("/ok", context =>
+            var response = await _app.Get("/ok", context =>
             {
                 context.HttpRequest();
             });
@@ -97,9 +99,9 @@
         }
 
         [Fact]
-        public void should_return_no_content_encoding_when_not_valid_return_status_code()
+        public async Task should_return_no_content_encoding_when_not_valid_return_status_code()
         {
-            var response = _app.Get("/nocontent", context =>
+            var response = await _app.Get("/nocontent", context =>
             {
                 context.Header("Accept-Encoding", "gzip");
                 context.HttpRequest();

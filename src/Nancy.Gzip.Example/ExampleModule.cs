@@ -4,7 +4,7 @@
     {
         public ExampleModule()
         {
-            Get["/example"] = _ => "Hello World";
+            Get("/example", _ => "Hello World");
         }
     }
 }
