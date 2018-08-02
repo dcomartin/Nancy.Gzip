@@ -41,35 +41,52 @@
                 return;
             }
 
-            CompressResponse(context.Response);
+            CompressResponse(context);
         }
 
-        private static void CompressResponse(Response response)
+        private static void CompressResponse(NancyContext context)
         {
-            response.Headers["Content-Encoding"] = "gzip";
-
-            var contents = response.Contents;
-            response.Contents = responseStream =>
+            if (context.Request.Headers.AcceptEncoding.Any(x => x.Contains("deflate")))
             {
-                using (var compression = new GZipStream(responseStream, CompressionMode.Compress))
+                context.Response.Headers["Content-Encoding"] = "deflate";
+
+                var contents = context.Response.Contents;
+                context.Response.Contents = responseStream =>
                 {
-                    contents(compression);
-                }
-            };
+                    using (var compression = new DeflateStream(responseStream, CompressionLevel.Optimal, true))
+                    {
+                        contents(compression);
+                    }
+                };
+            }
+            else
+            {
+                context.Response.Headers["Content-Encoding"] = "gzip";
+
+                var contents = context.Response.Contents;
+                context.Response.Contents = responseStream =>
+                {
+                    using (var compression = new GZipStream(responseStream, CompressionMode.Compress))
+                    {
+                        contents(compression);
+                    }
+                };
+            }
+
+            context.Response.Headers.Remove("Content-Length");
         }
 
         private static bool ContentLengthIsTooSmall(Response response)
         {
+            var ret = true;
             string contentLength;
-            if (response.Headers.TryGetValue("Content-Length", out contentLength))
+            if (!response.Headers.TryGetValue("Content-Length", out contentLength)) contentLength ="0";
+            var length = long.Parse(contentLength);
+            if (length > _settings.MinimumBytes)
             {
-                var length = long.Parse(contentLength);
-                if (length < _settings.MinimumBytes)
-                {
-                    return true;
-                }
+                ret = false;
             }
-            return false;
+            return ret;
         }
 
         private static bool ResponseIsCompatibleMimeType(Response response)
@@ -79,7 +96,7 @@
 
         private static bool RequestIsGzipCompatible(Request request)
         {
-            return request.Headers.AcceptEncoding.Any(x => x.Contains("gzip"));
+            return request.Headers.AcceptEncoding.Any(x => x.Contains("gzip") || x.Contains("deflate"));
         }
     }
 }
