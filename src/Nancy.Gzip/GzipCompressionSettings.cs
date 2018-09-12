@@ -16,5 +16,7 @@
             "application/x-javascript",
             "application/atom+xml",
         };
+
+        public ILog Logger { get; set; } = null;
     }
 }
