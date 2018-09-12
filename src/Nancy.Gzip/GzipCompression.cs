@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Nancy.Gzip
 {
@@ -53,7 +54,7 @@ namespace Nancy.Gzip
 
         private static bool ResponseIsCompressed(Response response)
         {
-            var ret = response.Headers.Keys.Any(x => x.Contains("Content-Encoding"));
+            bool ret = response.Headers.Keys.Any(x => x.Contains("Content-Encoding"));
 
             return ret;
         }
@@ -67,7 +68,7 @@ namespace Nancy.Gzip
                 _settings.Logger?.Debug("GZip compress response with deflate");
                 context.Response.Headers["Content-Encoding"] = "deflate";
 
-                var contents = context.Response.Contents;
+                Action<Stream> contents = context.Response.Contents;
                 context.Response.Contents = responseStream =>
                 {
                     using (DeflateStream compression = new DeflateStream(responseStream, CompressionLevel.Optimal, true))
@@ -81,7 +82,7 @@ namespace Nancy.Gzip
                 _settings.Logger?.Debug("GZip compress response with gzip");
                 context.Response.Headers["Content-Encoding"] = "gzip";
 
-                var contents = context.Response.Contents;
+                Action<Stream> contents = context.Response.Contents;
                 context.Response.Contents = responseStream =>
                 {
                     using (GZipStream compression = new GZipStream(responseStream, CompressionMode.Compress, true))
@@ -104,9 +105,8 @@ namespace Nancy.Gzip
 
         private static bool ContentLengthIsTooSmall(Response response)
         {
-            var ret = true;
-            string contentLength;
-            if (!response.Headers.TryGetValue("Content-Length", out contentLength))
+            bool ret = true;
+            if (!response.Headers.TryGetValue("Content-Length", out string contentLength))
             {
                 using (MemoryStream mm = new MemoryStream())
                 {
@@ -117,12 +117,14 @@ namespace Nancy.Gzip
             }
             _settings.Logger?.Debug($"GZip Content-Length of response is {contentLength}");
 
-            var length = long.Parse(contentLength);
+            long length = long.Parse(contentLength);
             if (length > _settings.MinimumBytes)
             {
                 ret = false;
-                //response.Headers.Remove("Content-Length");
+#pragma warning disable S125 // Sections of code should not be commented out
+                            //response.Headers.Remove("Content-Length");
             }
+#pragma warning restore S125 // Sections of code should not be commented out
 
             _settings.Logger?.Debug($"GZip Content-Length is too small {ret}");
 
@@ -131,7 +133,7 @@ namespace Nancy.Gzip
 
         private static bool ResponseIsCompatibleMimeType(Response response)
         {
-            var ret = _settings.MimeTypes.Any(x => x == response.ContentType || response.ContentType.StartsWith($"{x};"));
+            bool ret = _settings.MimeTypes.Any(x => x == response.ContentType || response.ContentType.StartsWith($"{x};"));
             _settings.Logger?.Debug($"GZip Content-Type is Mime compatible {ret}");
 
             return ret;
@@ -139,7 +141,7 @@ namespace Nancy.Gzip
 
         private static bool RequestIsGzipCompatible(Request request)
         {
-            var ret = request.Headers.AcceptEncoding.Any(x => x.Contains("gzip") || x.Contains("deflate"));
+            bool ret = request.Headers.AcceptEncoding.Any(x => x.Contains("gzip") || x.Contains("deflate"));
             _settings.Logger?.Debug($"GZip Accept-Encoding is GZip or Deflate compatible {ret}");
 
             return ret;

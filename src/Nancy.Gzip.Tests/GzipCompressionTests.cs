@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Nancy.Gzip.Tests
 {
@@ -19,45 +21,46 @@ namespace Nancy.Gzip.Tests
         });
 
         // ReSharper disable once ClassNeverInstantiated.Local
-        private class TestModule : NancyModule
+        private sealed class TestModule : NancyModule
         {
             private const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVXYZ";
 
 #pragma warning disable S1144 // Unused private types or members should be removed
             public TestModule()
             {
-                Get["/ok"] = _ =>
+                Get("/ok", _ =>
                 {
                     Response response = String.Join(",", Enumerable.Repeat(Alphabet, 1000));
                     response.ContentType = "application/json; charset=utf-8";
                     response.StatusCode = HttpStatusCode.OK;
                     return response;
-                };
+                });
 
-                Get["/small"] = _ =>
+                Get("/small", _ =>
                 {
                     var response = new Response();
                     response.Headers.Add("Content-Length", "0");
                     return response;
-                };
+                });
 
 
-                Get["/novalidcontenttype"] = _ =>
+                Get("/novalidcontenttype", _ =>
                 {
                     Response response = Alphabet;
                     response.Headers.Add("Content-Type", "application/x-not-valid");
                     return response;
-                };
+                });
 
-                Get["/nocontent"] = _ => HttpStatusCode.NoContent;
+                Get("/nocontent", _ => HttpStatusCode.NoContent);
             }
 #pragma warning restore S1144 // Unused private types or members should be removed
         }
 
+#pragma warning disable UseAsyncSuffix // Use Async suffix
         [Fact]
-        public void should_return_content_encoding_when_accept()
+        public async Task should_return_content_encoding_when_accept()
         {
-            BrowserResponse response = _app.Get("/ok", context =>
+            BrowserResponse response = await _app.Get("/ok", context =>
             {
                 context.Header("Accept-Encoding", "gzip");
                 context.HttpRequest();
@@ -68,9 +71,9 @@ namespace Nancy.Gzip.Tests
         }
 
         [Fact]
-        public void should_return_no_content_encoding_when_too_small()
+        public async Task should_return_no_content_encoding_when_too_small()
         {
-            BrowserResponse response = _app.Get("/small", context =>
+            BrowserResponse response = await _app.Get("/small", context =>
             {
                 context.Header("Accept-Encoding", "gzip");
                 context.HttpRequest();
@@ -79,9 +82,9 @@ namespace Nancy.Gzip.Tests
         }
 
         [Fact]
-        public void should_return_no_content_encoding_when_not_valid_content_type()
+        public async Task should_return_no_content_encoding_when_not_valid_content_type()
         {
-            BrowserResponse response = _app.Get("/novalidcontenttype", context =>
+            BrowserResponse response = await _app.Get("/novalidcontenttype", context =>
             {
                 context.Header("Accept-Encoding", "gzip");
                 context.HttpRequest();
@@ -90,9 +93,9 @@ namespace Nancy.Gzip.Tests
         }
 
         [Fact]
-        public void should_return_no_content_encoding_when_not_valid_accept()
+        public async Task should_return_no_content_encoding_when_not_valid_accept()
         {
-            BrowserResponse response = _app.Get("/ok", context =>
+            BrowserResponse response = await _app.Get("/ok", context =>
             {
                 context.HttpRequest();
             });
@@ -100,14 +103,15 @@ namespace Nancy.Gzip.Tests
         }
 
         [Fact]
-        public void should_return_no_content_encoding_when_not_valid_return_status_code()
+        public async Task should_return_no_content_encoding_when_not_valid_return_status_code()
         {
-            BrowserResponse response = _app.Get("/nocontent", context =>
+            BrowserResponse response = await _app.Get("/nocontent", context =>
             {
                 context.Header("Accept-Encoding", "gzip");
                 context.HttpRequest();
             });
             response.Headers.ContainsKey("Content-Encoding").Should().BeFalse();
         }
+#pragma warning restore UseAsyncSuffix // Use Async suffix
     }
 }
